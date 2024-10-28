@@ -157,10 +157,10 @@ const Settings = () => {
   const commonPadding = "py-2 px-4";
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="mx-auto lg:p-4 md:p-0">
       <div className="bg-white shadow-md rounded-lg p-4 max-w-4xl mx-auto">
         {/* Header Row */}
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex justify-between items-center mb-4 ">
           <h2 className="text-2xl font-bold">Settings</h2>
           <button
             onClick={() => (window.location.href = "/spotter")}
@@ -171,7 +171,7 @@ const Settings = () => {
         </div>
 
         {/* Search and Filter */}
-        <div className="flex flex-col md:flex-row items-center mb-4 space-y-2 md:space-y-0 md:space-x-2">
+        <div className="flex flex-col md:flex-row md:mt-5 items-center mb-4 space-y-2 md:space-y-0 md:space-x-2">
           <div className="relative w-full">
             <span className="absolute inset-y-0 left-0 flex items-center pl-3">
               <FaSearch className="text-gray-500" />
@@ -218,9 +218,18 @@ const Settings = () => {
           </div>
         </div>
 
-        {/* Add Attendee */}
+        {/* Add Attendee Section */}
         <div className="mb-4">
-          <h3 className="text-lg font-semibold mb-2">Add Attendee</h3>
+          <h3 className="text-lg font-semibold mb-2 hidden md:block">
+            Add Attendee
+          </h3>
+          <div className="flex mt-8 items-center mb-2 md:hidden">
+            <hr className="flex-grow border-gray-300" />
+            <span className="mx-4 font-semibold text-gray-700  md:text-xs">
+              Add Attendee
+            </span>
+            <hr className="flex-grow border-gray-300" />
+          </div>
           <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
             <input
               type="text"
@@ -241,7 +250,16 @@ const Settings = () => {
 
         {/* Upload CSV/JSON */}
         <div className="mb-4">
-          <h3 className="text-lg font-semibold mb-2">Bulk Add Attendees</h3>
+          <h3 className="text-lg font-semibold mb-2 hidden md:block">
+            Bulk Add Attendees
+          </h3>
+          <div className="flex mt-8 items-center mb-2 md:hidden ">
+            <hr className="flex-grow border-gray-300" />
+            <span className=" mx-4 font-semibold text-gray-700">
+              Bulk Add Attendees
+            </span>
+            <hr className="flex-grow border-gray-300" />
+          </div>
           <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
             <button
               className={`bg-cyan-800 hover:bg-cyan-700 text-white ${commonPadding} rounded w-full md:w-auto flex items-center justify-center`}
@@ -261,7 +279,16 @@ const Settings = () => {
 
         {/* Attendees List */}
         <div>
-          <h3 className="text-lg font-semibold mb-2">All Attendees</h3>
+          <h3 className="text-lg font-semibold mb-2 hidden md:block">
+            All Attendees
+          </h3>
+          <div className="flex mt-10 items-center mb-2 md:hidden ">
+            <hr className="flex-grow border-gray-300" />
+            <span className=" mx-4 font-semibold text-gray-700">
+              All Attendees
+            </span>
+            <hr className="flex-grow border-gray-300" />
+          </div>
           <div className="overflow-x-auto">
             <div className="hidden md:block">
               <table className="min-w-full table-fixed bg-white">
@@ -323,7 +350,7 @@ const Settings = () => {
               {filteredAttendees.map((attendee) => (
                 <div
                   key={attendee.id}
-                  className="bg-white shadow-md rounded-lg p-4 mb-4"
+                  className="bg-white border border-gray-300 shadow-md rounded-lg p-4 mb-4"
                 >
                   <div className="mb-3">
                     <strong>Name:</strong> {attendee.name}
@@ -341,7 +368,9 @@ const Settings = () => {
                   <div className="mt-2">
                     <div className="relative flex items-center my-3">
                       <div className="flex-grow border-t border-gray-300"></div>
-                      <span className="mx-2 text-gray-500">Actions</span>
+                      <span className="mx-2 text-gray-500 text-xs">
+                        Actions
+                      </span>
                       <div className="flex-grow border-t border-gray-300"></div>
                     </div>
                     <div className="flex flex-col space-y-2">

@@ -1,11 +1,27 @@
 // src/components/Settings.jsx
-import React, { useState } from "react";
-import { ref, set, push } from "firebase/database";
+import React, { useState, useEffect } from "react";
+import { ref, set, push, onValue, update, remove } from "firebase/database";
 import { database } from "../firebase";
 
 const Settings = () => {
   const [inputValue, setInputValue] = useState("");
   const [jsonInput, setJsonInput] = useState("");
+  const [attendees, setAttendees] = useState([]);
+
+  // Fetch attendees from Firebase
+  useEffect(() => {
+    const attendeesRef = ref(database, "attendees");
+    onValue(attendeesRef, (snapshot) => {
+      const data = snapshot.val();
+      const attendeesList = data
+        ? Object.keys(data).map((key) => ({
+            id: key,
+            ...data[key],
+          }))
+        : [];
+      setAttendees(attendeesList);
+    });
+  }, []);
 
   // Function to add a single attendee from input field
   const addAttendee = () => {
@@ -14,7 +30,7 @@ const Settings = () => {
       const newAttendeeRef = push(attendeesRef);
       set(newAttendeeRef, {
         name: inputValue,
-        status: "Not Present",
+        status: false, // Status set to false (Not Present)
       });
       setInputValue(""); // Clear the input field
     }
@@ -31,7 +47,7 @@ const Settings = () => {
             const newAttendeeRef = push(attendeesRef);
             set(newAttendeeRef, {
               name: attendee.name,
-              status: "Not Present",
+              status: false, // Status set to false (Not Present)
             });
           }
         });
@@ -42,6 +58,20 @@ const Settings = () => {
     } catch (error) {
       alert("Invalid JSON. Please check your input.");
     }
+  };
+
+  // Function to tag an attendee as "Not Present"
+  const markAsNotPresent = (attendeeId) => {
+    const attendeeRef = ref(database, `attendees/${attendeeId}`);
+    update(attendeeRef, { status: false }); // Set status to false
+    alert("Attendee marked as not present!");
+  };
+
+  // Function to delete an attendee
+  const deleteAttendee = (attendeeId) => {
+    const attendeeRef = ref(database, `attendees/${attendeeId}`);
+    remove(attendeeRef);
+    alert("Attendee deleted successfully!");
   };
 
   return (
@@ -66,6 +96,25 @@ const Settings = () => {
           onChange={(e) => setJsonInput(e.target.value)}
         ></textarea>
         <button onClick={addAttendeesFromJson}>Add From JSON</button>
+      </div>
+
+      <div>
+        <h3>All Attendees</h3>
+        <ul>
+          {attendees.map((attendee) => (
+            <li key={attendee.id}>
+              {attendee.name} - {attendee.status ? "Present" : "Not Present"}
+              {attendee.status && (
+                <button onClick={() => markAsNotPresent(attendee.id)}>
+                  Mark as Not Present
+                </button>
+              )}
+              <button onClick={() => deleteAttendee(attendee.id)}>
+                Delete
+              </button>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );

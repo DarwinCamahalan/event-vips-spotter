@@ -6,7 +6,6 @@ import { database } from "../firebase";
 const Spotter = () => {
   const [attendees, setAttendees] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [foundAttendee, setFoundAttendee] = useState(null);
 
   // Fetch attendees from Firebase
   useEffect(() => {
@@ -23,18 +22,15 @@ const Spotter = () => {
     });
   }, []);
 
-  // Search for an attendee by name
-  const searchAttendee = () => {
-    const attendee = attendees.find(
-      (person) => person.name.toLowerCase() === searchTerm.toLowerCase()
-    );
-    setFoundAttendee(attendee || null);
-  };
+  // Function to filter attendees based on search term
+  const filteredAttendees = attendees.filter((attendee) =>
+    attendee.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   // Mark the attendee as present
   const markAsPresent = (attendeeId) => {
     const attendeeRef = ref(database, `attendees/${attendeeId}`);
-    update(attendeeRef, { status: "Present" });
+    update(attendeeRef, { status: true }); // Set status to true
     alert("Attendee marked as present!");
   };
 
@@ -48,24 +44,23 @@ const Spotter = () => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <button onClick={searchAttendee}>Search</button>
       </div>
 
-      {foundAttendee ? (
-        <div>
-          <h3>Attendee Found:</h3>
-          <p>
-            {foundAttendee.name} - {foundAttendee.status}
-          </p>
-          {foundAttendee.status !== "Present" && (
-            <button onClick={() => markAsPresent(foundAttendee.id)}>
-              Mark as Present
-            </button>
-          )}
-        </div>
-      ) : (
-        searchTerm && <p>No attendee found with that name.</p>
-      )}
+      <div>
+        <h3>Attendees List</h3>
+        <ul>
+          {filteredAttendees.map((attendee) => (
+            <li key={attendee.id}>
+              {attendee.name} - {attendee.status ? "Present" : "Not Present"}
+              {!attendee.status && (
+                <button onClick={() => markAsPresent(attendee.id)}>
+                  Mark as Present
+                </button>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };

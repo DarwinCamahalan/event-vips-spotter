@@ -11,10 +11,12 @@ const Display = () => {
     onValue(attendeesRef, (snapshot) => {
       const data = snapshot.val();
       const attendeesList = data
-        ? Object.keys(data).map((key) => ({
-            id: key,
-            ...data[key],
-          }))
+        ? Object.keys(data)
+            .map((key) => ({
+              id: key,
+              ...data[key],
+            }))
+            .filter((attendee) => attendee.status === true) // Only show present attendees
         : [];
       setAttendees(attendeesList);
     });
@@ -22,12 +24,10 @@ const Display = () => {
 
   return (
     <div>
-      <h2>Attendees List</h2>
+      <h2>Present Attendees</h2>
       <ul>
         {attendees.map((attendee) => (
-          <li key={attendee.id}>
-            {attendee.name} - {attendee.status}
-          </li>
+          <li key={attendee.id}>{attendee.name}</li>
         ))}
       </ul>
     </div>

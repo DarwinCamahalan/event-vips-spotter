@@ -153,6 +153,9 @@ const Settings = () => {
     return matchesSearch && matchesFilter;
   });
 
+  // Common padding for all buttons
+  const commonPadding = "py-2 px-4";
+
   return (
     <div className="container mx-auto p-4">
       <div className="bg-white shadow-md rounded-lg p-4 max-w-4xl mx-auto">
@@ -161,7 +164,7 @@ const Settings = () => {
           <h2 className="text-2xl font-bold">Settings</h2>
           <button
             onClick={() => (window.location.href = "/spotter")}
-            className="flex items-center bg-green-800 text-white py-2 px-4 rounded hover:bg-green-700"
+            className={`flex items-center bg-green-800 text-white ${commonPadding} rounded hover:bg-green-700`}
           >
             <FaUserCheck className="mr-2" /> Spot Attendees
           </button>
@@ -184,7 +187,7 @@ const Settings = () => {
           <div className="relative w-full md:w-auto">
             <button
               onClick={toggleFilterDropdown}
-              className="bg-gray-200 p-2 rounded w-full md:w-auto flex items-center justify-center"
+              className={`bg-gray-200 ${commonPadding} rounded w-full md:w-auto flex items-center justify-center`}
             >
               <FaFilter className="mr-1" /> Filter
             </button>
@@ -228,7 +231,7 @@ const Settings = () => {
             />
             <button
               onClick={addAttendee}
-              className="bg-green-600 text-white py-2 px-4 rounded w-full md:w-auto hover:bg-green-700 flex items-center justify-center"
+              className={`bg-green-600 text-white ${commonPadding} rounded w-full md:w-auto hover:bg-green-700 flex items-center justify-center`}
             >
               <FaUserPlus className="mr-2" />
               Add Attendee
@@ -240,13 +243,15 @@ const Settings = () => {
         <div className="mb-4">
           <h3 className="text-lg font-semibold mb-2">Bulk Add Attendees</h3>
           <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
-            <button className="bg-cyan-800 hover:bg-cyan-700 text-white py-2 px-4 rounded w-full md:w-auto flex items-center justify-center">
+            <button
+              className={`bg-cyan-800 hover:bg-cyan-700 text-white ${commonPadding} rounded w-full md:w-auto flex items-center justify-center`}
+            >
               <FaFileCsv className="mr-2" />
               Upload CSV
             </button>
             <button
               onClick={addAttendeesFromJson}
-              className="bg-slate-900 hover:bg-slate-800 text-white py-2 px-4 rounded w-full md:w-auto flex items-center justify-center"
+              className={`bg-slate-900 hover:bg-slate-800 text-white ${commonPadding} rounded w-full md:w-auto flex items-center justify-center`}
             >
               <FaFileUpload className="mr-2" />
               Upload JSON
@@ -284,11 +289,11 @@ const Settings = () => {
                           {attendee.status ? "Present" : "Not Present"}
                         </span>
                       </td>
-                      <td className="py-2 px-4 border-b">
+                      <td className="py-2 px-1 border-b">
                         <div className="flex space-x-2">
                           <button
                             onClick={() => markAsNotPresent(attendee.id)}
-                            className={`py-1 px-2 rounded flex items-center justify-center ${
+                            className={`py-1 px-2 rounded flex items-center justify-center ${commonPadding} ${
                               attendee.status
                                 ? "bg-indigo-600 text-white"
                                 : "bg-gray-300 text-gray-500 cursor-not-allowed"
@@ -296,11 +301,11 @@ const Settings = () => {
                             disabled={!attendee.status}
                           >
                             <FaUserXmark className="mr-2" />
-                            Mark as Not Present
+                            Tag as Not Present
                           </button>
                           <button
                             onClick={() => deleteAttendee(attendee.id)}
-                            className="bg-red-500 text-white py-1 px-2 rounded hover:bg-red-600 flex items-center justify-center"
+                            className={`bg-red-500 text-white ${commonPadding} py-1 px-2 rounded hover:bg-red-600 flex items-center justify-center`}
                           >
                             <FaTrash className="mr-2" />
                             Delete
@@ -342,7 +347,7 @@ const Settings = () => {
                     <div className="flex flex-col space-y-2">
                       <button
                         onClick={() => markAsNotPresent(attendee.id)}
-                        className={`py-1 px-2 rounded flex items-center justify-center ${
+                        className={`py-1 px-2 rounded flex items-center justify-center ${commonPadding} ${
                           attendee.status
                             ? "bg-indigo-600 text-white"
                             : "bg-gray-300 text-gray-500 cursor-not-allowed"
@@ -350,11 +355,11 @@ const Settings = () => {
                         disabled={!attendee.status}
                       >
                         <FaUserXmark className="mr-2" />
-                        Mark as Not Present
+                        Tag as Not Present
                       </button>
                       <button
                         onClick={() => deleteAttendee(attendee.id)}
-                        className="bg-red-500 text-white py-1 px-2 rounded hover:bg-red-600 flex items-center justify-center"
+                        className={`bg-red-500 text-white ${commonPadding} py-1 px-2 rounded hover:bg-red-600 flex items-center justify-center`}
                       >
                         <FaTrash className="mr-2" />
                         Delete Attendee

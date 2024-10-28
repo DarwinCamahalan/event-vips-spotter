@@ -11,6 +11,7 @@ import {
   FaFileUpload,
 } from "react-icons/fa";
 import { FaUserXmark } from "react-icons/fa6";
+import DynamicModal from "./DynamicModal"; // Import the modal
 
 const Settings = () => {
   const [inputValue, setInputValue] = useState("");
@@ -19,6 +20,12 @@ const Settings = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterOption, setFilterOption] = useState("");
   const [filterDropdownVisible, setFilterDropdownVisible] = useState(false);
+
+  // State for modal
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalStatus, setModalStatus] = useState("");
+  const [modalTitle, setModalTitle] = useState("");
+  const [modalDescription, setModalDescription] = useState("");
 
   useEffect(() => {
     const attendeesRef = ref(database, "attendees");
@@ -42,6 +49,13 @@ const Settings = () => {
       .join(" ");
   };
 
+  const showModal = (status, title, description) => {
+    setModalStatus(status);
+    setModalTitle(title);
+    setModalDescription(description);
+    setModalVisible(true);
+  };
+
   // Function to add a single attendee from input field
   const addAttendee = () => {
     if (inputValue.trim()) {
@@ -53,6 +67,11 @@ const Settings = () => {
         status: false, // Status set to false (Not Present)
       });
       setInputValue(""); // Clear the input field
+      showModal(
+        "success",
+        "Attendee Added",
+        `${formattedName} has been added.`
+      );
     }
   };
 
@@ -72,11 +91,20 @@ const Settings = () => {
           }
         });
         setJsonInput(""); // Clear the JSON input field
+        showModal(
+          "success",
+          "Attendees Added",
+          "Attendees have been added from JSON."
+        );
       } else {
-        alert("Invalid JSON format. Please provide an array of objects.");
+        showModal(
+          "error",
+          "Invalid JSON Format",
+          "Please provide an array of objects."
+        );
       }
     } catch (error) {
-      alert("Invalid JSON. Please check your input.");
+      showModal("error", "Invalid JSON", "Please check your input.");
     }
   };
 
@@ -84,14 +112,22 @@ const Settings = () => {
   const markAsNotPresent = (attendeeId) => {
     const attendeeRef = ref(database, `attendees/${attendeeId}`);
     update(attendeeRef, { status: false }); // Set status to false
-    alert("Attendee marked as not present!");
+    showModal(
+      "info",
+      "Marked as Not Present",
+      "The attendee has been marked as not present."
+    );
   };
 
   // Function to delete an attendee
   const deleteAttendee = (attendeeId) => {
     const attendeeRef = ref(database, `attendees/${attendeeId}`);
     remove(attendeeRef);
-    alert("Attendee deleted successfully!");
+    showModal(
+      "error",
+      "Attendee Deleted",
+      "The attendee has been deleted successfully."
+    );
   };
 
   // Toggle filter dropdown
@@ -218,6 +254,7 @@ const Settings = () => {
           </div>
         </div>
 
+        {/* Attendees List */}
         <div>
           <h3 className="text-lg font-semibold mb-2">All Attendees</h3>
           <div className="overflow-x-auto">
@@ -329,6 +366,16 @@ const Settings = () => {
             </div>
           </div>
         </div>
+
+        {/* Modal */}
+        {modalVisible && (
+          <DynamicModal
+            status={modalStatus}
+            title={modalTitle}
+            description={modalDescription}
+            onClose={() => setModalVisible(false)}
+          />
+        )}
       </div>
     </div>
   );

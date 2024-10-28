@@ -11,7 +11,8 @@ import {
   FaFileUpload,
 } from "react-icons/fa";
 import { FaUserXmark } from "react-icons/fa6";
-import DynamicModal from "./DynamicModal"; // Import the modal
+import DynamicModal from "./DynamicModal"; // Import the dynamic modal
+import ConfirmationModal from "./ConfirmationModal"; // Import the confirmation modal
 
 const Settings = () => {
   const [inputValue, setInputValue] = useState("");
@@ -21,11 +22,15 @@ const Settings = () => {
   const [filterOption, setFilterOption] = useState("");
   const [filterDropdownVisible, setFilterDropdownVisible] = useState(false);
 
-  // State for modal
+  // State for dynamic modal
   const [modalVisible, setModalVisible] = useState(false);
   const [modalStatus, setModalStatus] = useState("");
   const [modalTitle, setModalTitle] = useState("");
   const [modalDescription, setModalDescription] = useState("");
+
+  // State for confirmation modal
+  const [confirmationVisible, setConfirmationVisible] = useState(false);
+  const [attendeeToDelete, setAttendeeToDelete] = useState(null);
 
   useEffect(() => {
     const attendeesRef = ref(database, "attendees");
@@ -58,21 +63,33 @@ const Settings = () => {
 
   // Function to add a single attendee from input field
   const addAttendee = () => {
-    if (inputValue.trim()) {
-      const attendeesRef = ref(database, "attendees");
-      const newAttendeeRef = push(attendeesRef);
-      const formattedName = toSentenceCase(inputValue); // Format the name to sentence case
-      set(newAttendeeRef, {
-        name: formattedName,
-        status: false, // Status set to false (Not Present)
-      });
-      setInputValue(""); // Clear the input field
-      showModal(
-        "success",
-        "Attendee Added",
-        `${formattedName} has been added.`
-      );
+    const formattedName = toSentenceCase(inputValue);
+    if (!formattedName.trim()) {
+      return;
     }
+
+    // Check for duplicate names
+    const isDuplicate = attendees.some(
+      (attendee) => attendee.name.toLowerCase() === formattedName.toLowerCase()
+    );
+
+    if (isDuplicate) {
+      showModal(
+        "error",
+        "Duplicate Name",
+        `${formattedName} is already in the list.`
+      );
+      return;
+    }
+
+    const attendeesRef = ref(database, "attendees");
+    const newAttendeeRef = push(attendeesRef);
+    set(newAttendeeRef, {
+      name: formattedName,
+      status: false, // Status set to false (Not Present)
+    });
+    setInputValue(""); // Clear the input field
+    showModal("success", "Attendee Added", `${formattedName} has been added.`);
   };
 
   // Function to add multiple attendees from JSON input
@@ -80,22 +97,54 @@ const Settings = () => {
     try {
       const attendeesArray = JSON.parse(jsonInput);
       if (Array.isArray(attendeesArray)) {
+        const newAttendees = [];
+        const duplicateNames = [];
+
         attendeesArray.forEach((attendee) => {
           if (attendee.name) {
-            const attendeesRef = ref(database, "attendees");
-            const newAttendeeRef = push(attendeesRef);
-            set(newAttendeeRef, {
-              name: attendee.name,
-              status: false, // Status set to false (Not Present)
-            });
+            const formattedName = toSentenceCase(attendee.name);
+            const isDuplicate = attendees.some(
+              (existingAttendee) =>
+                existingAttendee.name.toLowerCase() ===
+                formattedName.toLowerCase()
+            );
+
+            if (!isDuplicate) {
+              newAttendees.push({
+                name: formattedName,
+                status: false, // Status set to false (Not Present)
+              });
+            } else {
+              duplicateNames.push(formattedName);
+            }
           }
         });
-        setJsonInput(""); // Clear the JSON input field
-        showModal(
-          "success",
-          "Attendees Added",
-          "Attendees have been added from JSON."
-        );
+
+        // Add only non-duplicate attendees
+        if (newAttendees.length > 0) {
+          const attendeesRef = ref(database, "attendees");
+          newAttendees.forEach((newAttendee) => {
+            const newAttendeeRef = push(attendeesRef);
+            set(newAttendeeRef, newAttendee);
+          });
+          setJsonInput(""); // Clear the JSON input field
+          showModal(
+            "success",
+            "Attendees Added",
+            "Attendees have been added from JSON."
+          );
+        }
+
+        // Show duplicates found message
+        if (duplicateNames.length > 0) {
+          showModal(
+            "warning",
+            "Duplicate Names Skipped",
+            `The following names were skipped as they are duplicates: ${duplicateNames.join(
+              ", "
+            )}.`
+          );
+        }
       } else {
         showModal(
           "error",
@@ -119,12 +168,30 @@ const Settings = () => {
     );
   };
 
-  // Function to delete an attendee
+  // Handle delete confirmation
+  const confirmDelete = (attendeeId) => {
+    setAttendeeToDelete(attendeeId);
+    setConfirmationVisible(true);
+  };
+
+  const handleDelete = () => {
+    if (attendeeToDelete) {
+      deleteAttendee(attendeeToDelete);
+      setAttendeeToDelete(null);
+      setConfirmationVisible(false);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setAttendeeToDelete(null);
+    setConfirmationVisible(false);
+  };
+
   const deleteAttendee = (attendeeId) => {
     const attendeeRef = ref(database, `attendees/${attendeeId}`);
     remove(attendeeRef);
     showModal(
-      "error",
+      "success",
       "Attendee Deleted",
       "The attendee has been deleted successfully."
     );
@@ -225,7 +292,7 @@ const Settings = () => {
           </h3>
           <div className="flex mt-8 items-center mb-2 md:hidden">
             <hr className="flex-grow border-gray-300" />
-            <span className="mx-4 font-semibold text-gray-700  md:text-xs">
+            <span className="mx-4 font-semibold text-gray-700 md:text-xs">
               Add Attendee
             </span>
             <hr className="flex-grow border-gray-300" />
@@ -237,6 +304,11 @@ const Settings = () => {
               placeholder="Enter name"
               value={inputValue}
               onChange={(e) => setInputValue(toSentenceCase(e.target.value))}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  addAttendee(); // Call the function when Enter is pressed
+                }
+              }}
             />
             <button
               onClick={addAttendee}
@@ -255,7 +327,7 @@ const Settings = () => {
           </h3>
           <div className="flex mt-8 items-center mb-2 md:hidden ">
             <hr className="flex-grow border-gray-300" />
-            <span className=" mx-4 font-semibold text-gray-700">
+            <span className="mx-4 font-semibold text-gray-700">
               Bulk Add Attendees
             </span>
             <hr className="flex-grow border-gray-300" />
@@ -284,7 +356,7 @@ const Settings = () => {
           </h3>
           <div className="flex mt-10 items-center mb-2 md:hidden ">
             <hr className="flex-grow border-gray-300" />
-            <span className=" mx-4 font-semibold text-gray-700">
+            <span className="mx-4 font-semibold text-gray-700">
               All Attendees
             </span>
             <hr className="flex-grow border-gray-300" />
@@ -331,7 +403,7 @@ const Settings = () => {
                             Tag as Not Present
                           </button>
                           <button
-                            onClick={() => deleteAttendee(attendee.id)}
+                            onClick={() => confirmDelete(attendee.id)}
                             className={`bg-red-500 text-white ${commonPadding} py-1 px-2 rounded hover:bg-red-600 flex items-center justify-center`}
                           >
                             <FaTrash className="mr-2" />
@@ -387,7 +459,7 @@ const Settings = () => {
                         Tag as Not Present
                       </button>
                       <button
-                        onClick={() => deleteAttendee(attendee.id)}
+                        onClick={() => confirmDelete(attendee.id)}
                         className={`bg-red-500 text-white ${commonPadding} py-1 px-2 rounded hover:bg-red-600 flex items-center justify-center`}
                       >
                         <FaTrash className="mr-2" />
@@ -401,13 +473,23 @@ const Settings = () => {
           </div>
         </div>
 
-        {/* Modal */}
+        {/* Dynamic Modal */}
         {modalVisible && (
           <DynamicModal
             status={modalStatus}
             title={modalTitle}
             description={modalDescription}
             onClose={() => setModalVisible(false)}
+          />
+        )}
+
+        {/* Confirmation Modal */}
+        {confirmationVisible && (
+          <ConfirmationModal
+            title="Confirm Deletion"
+            description="Are you sure you want to delete this attendee?"
+            onConfirm={handleDelete}
+            onCancel={handleCancelDelete}
           />
         )}
       </div>

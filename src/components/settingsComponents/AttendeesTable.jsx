@@ -79,7 +79,7 @@ const AttendeesTable = ({
             key={attendee.id}
             className="bg-white border border-gray-300 shadow-md rounded-lg p-4 mb-4"
           >
-            <div className="mb-2">
+            <div className="mb-3">
               <strong>Name:</strong> {attendee.name}
             </div>
             <div className="mb-2">

@@ -35,17 +35,22 @@ const Spotter = () => {
     setModalVisible(true);
   };
 
-  // Function to filter attendees based on search term and selected filter
-  const filteredAttendees = attendees.filter((attendee) => {
-    const matchesSearch = attendee.name
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
-    const matchesFilter =
-      filter === "all" ||
-      (filter === "present" && attendee.status) ||
-      (filter === "notPresent" && !attendee.status);
-    return matchesSearch && matchesFilter;
-  });
+  // Function to filter attendees based on search term and selected filter, and move present attendees to the bottom
+  const filteredAttendees = attendees
+    .filter((attendee) => {
+      const matchesSearch = attendee.name
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+      const matchesFilter =
+        filter === "all" ||
+        (filter === "present" && attendee.status) ||
+        (filter === "notPresent" && !attendee.status);
+      return matchesSearch && matchesFilter;
+    })
+    .sort((a, b) => {
+      // Move present attendees (status: true) to the bottom
+      return a.status === b.status ? 0 : a.status ? 1 : -1;
+    });
 
   // Mark the attendee as present
   const markAsPresent = (attendeeId, attendeeName) => {
@@ -199,7 +204,7 @@ const Spotter = () => {
                     key={attendee.id}
                     className="bg-white border border-gray-300 shadow-md rounded-lg p-4 mb-4"
                   >
-                    <div className="mb-2 flex items-center">
+                    <div className="mb-3 flex items-center">
                       <h3 className="font-semibold mr-2">Name:</h3>
                       <span>{attendee.name}</span>
                     </div>
@@ -221,6 +226,7 @@ const Spotter = () => {
                         </span>
                         <div className="flex-grow border-t border-gray-300"></div>
                       </div>
+
                       <button
                         onClick={() =>
                           markAsPresent(attendee.id, attendee.name)

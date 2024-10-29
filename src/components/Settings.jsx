@@ -123,7 +123,6 @@ const Settings = () => {
   };
 
   const addAttendeesFromJson = (parsedData) => {
-    console.log("Received data for adding attendees:", parsedData); // Debugging log
     try {
       if (!Array.isArray(parsedData)) {
         throw new Error("The data is not an array.");

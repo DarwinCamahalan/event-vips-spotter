@@ -29,7 +29,6 @@ const BulkAddAttendees = ({
                 : `${row["First Name"]} ${row["Last Name"]}`.trim(),
             }));
 
-          console.log("Parsed CSV data:", data);
           addAttendeesFromCsv(data);
         },
         error: (error) => {
@@ -66,7 +65,6 @@ const BulkAddAttendees = ({
             );
           }
 
-          console.log("Parsed JSON data:", parsedData);
           addAttendeesFromJson(parsedData);
         } catch (error) {
           console.error("Error parsing JSON:", error.message);

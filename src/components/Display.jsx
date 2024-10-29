@@ -6,7 +6,7 @@ import { database } from "../firebase";
 const Display = () => {
   const [attendees, setAttendees] = useState([]);
   const [currentAttendeeIndex, setCurrentAttendeeIndex] = useState(0);
-  const currentIndexRef = useRef(0); // Reference to keep the current index
+  const currentIndexRef = useRef(0);
   const displayDuration = 5000; // 5 seconds per attendee
 
   useEffect(() => {
@@ -23,6 +23,12 @@ const Display = () => {
         : [];
 
       setAttendees(presentAttendees);
+
+      // Reset current index to start displaying the newly updated list
+      if (presentAttendees.length > 0) {
+        currentIndexRef.current = 0;
+        setCurrentAttendeeIndex(0);
+      }
     });
   }, []);
 
@@ -34,22 +40,34 @@ const Display = () => {
     }, displayDuration);
 
     return () => clearInterval(interval);
-  }, [attendees.length]); // Only reset the interval if the number of attendees changes
+  }, [attendees.length]);
 
   return (
-    <div className="flex items-center justify-center h-screen bg-white text-black">
+    <div
+      className="flex items-center justify-center h-screen text-white"
+      style={{
+        backgroundImage: "url('/bg.jpg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
       {attendees.length > 0 ? (
         <div
-          className="fade-text text-5xl font-bold"
-          key={attendees[currentAttendeeIndex]?.id} // use optional chaining to avoid errors
+          className="fade-text text-7xl font-bold"
+          key={attendees[currentAttendeeIndex]?.id}
         >
           {attendees[currentAttendeeIndex]?.name}
         </div>
       ) : (
-        <h1 className="text-3xl">No Present Attendees</h1>
+        <img
+          src="/empty_view.png"
+          alt="No Present Attendees"
+          className="w-1/2 max-w-full"
+        />
       )}
 
-      <style jsx>{`
+      <style>{`
         .fade-text {
           animation: fadeInOut ${displayDuration}ms ease-in-out;
         }

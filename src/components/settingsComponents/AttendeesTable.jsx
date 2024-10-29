@@ -11,6 +11,15 @@ const AttendeesTable = ({
 }) => {
   return (
     <div className="overflow-x-auto">
+      <h3 className="text-lg font-semibold mb-2 hidden md:block">
+        All Attendees
+      </h3>
+      <div className="flex mt-8 items-center mb-2 md:hidden">
+        <hr className="flex-grow border-gray-300" />
+        <span className="mx-4 font-semibold text-gray-700">All Attendees</span>
+        <hr className="flex-grow border-gray-300" />
+      </div>
+
       {/* Display as a table for medium and larger screens */}
       <div className="hidden md:block">
         <table className="min-w-full table-fixed bg-white">

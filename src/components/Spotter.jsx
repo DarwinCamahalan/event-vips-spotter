@@ -131,6 +131,9 @@ const Spotter = () => {
           ) : (
             <>
               <div className="hidden md:block">
+                <h3 className="mt-3 font-semibold mb-2 hidden md:block">
+                  All Attendees
+                </h3>
                 <table className="min-w-full table-fixed bg-white">
                   <thead>
                     <tr>
@@ -166,7 +169,7 @@ const Spotter = () => {
                             className={`flex items-center ${commonPadding} rounded ${
                               attendee.status
                                 ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                                : "bg-indigo-600 hover:bg-indigo-700 text-white"
+                                : "bg-green-700 hover:bg-green-600 text-white"
                             }`}
                             disabled={attendee.status}
                           >
@@ -184,6 +187,13 @@ const Spotter = () => {
 
               {/* Mobile View - Cards */}
               <div className="block md:hidden space-y-4">
+                <div className="flex mt-8 items-center mb-2 md:hidden">
+                  <hr className="flex-grow border-gray-300" />
+                  <span className="mx-4 font-semibold text-gray-700">
+                    All Attendees
+                  </span>
+                  <hr className="flex-grow border-gray-300" />
+                </div>
                 {filteredAttendees.map((attendee) => (
                   <div
                     key={attendee.id}

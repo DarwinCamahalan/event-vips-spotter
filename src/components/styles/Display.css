@@ -1,0 +1,58 @@
+/* GIF Background */
+.gif-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: fill;
+  z-index: -10;
+}
+
+/* Container styling */
+.display-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Attendee name styling */
+.attendee-name {
+  font-size: 7rem;
+  font-weight: bold;
+  z-index: 10;
+  animation: fadeInOut 5000ms ease-in-out;
+  margin-bottom: 1.5em;
+}
+
+/* Empty view image */
+.empty-view {
+  width: 50%;
+  max-width: 100%;
+  z-index: 10;
+  margin-bottom: 8em;
+}
+
+/* Animation */
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  10% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  90% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}

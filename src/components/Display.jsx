@@ -1,7 +1,7 @@
-// src/components/Display.jsx
 import React, { useEffect, useState, useRef } from "react";
 import { ref, onValue } from "firebase/database";
 import { database } from "../firebase";
+import "./styles/Display.css"; // Import the CSS file
 
 const Display = () => {
   const [attendees, setAttendees] = useState([]);
@@ -43,18 +43,17 @@ const Display = () => {
   }, [attendees.length]);
 
   return (
-    <div
-      className="flex items-center justify-center h-screen text-white"
-      style={{
-        backgroundImage: "url('/bg.jpg')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-      }}
-    >
+    <div className="display-container">
+      {/* GIF Background */}
+      <img
+        src="/bg.gif"
+        alt="Background Animation"
+        className="gif-background"
+      />
+
       {attendees.length > 0 ? (
         <div
-          className="fade-text text-7xl font-bold"
+          className="fade-text attendee-name"
           key={attendees[currentAttendeeIndex]?.id}
         >
           {attendees[currentAttendeeIndex]?.name}
@@ -63,34 +62,9 @@ const Display = () => {
         <img
           src="/empty_view.png"
           alt="No Present Attendees"
-          className="w-1/2 max-w-full"
+          className="empty-view"
         />
       )}
-
-      <style>{`
-        .fade-text {
-          animation: fadeInOut ${displayDuration}ms ease-in-out;
-        }
-
-        @keyframes fadeInOut {
-          0% {
-            opacity: 0;
-            transform: scale(0.9);
-          }
-          10% {
-            opacity: 1;
-            transform: scale(1);
-          }
-          90% {
-            opacity: 1;
-            transform: scale(1);
-          }
-          100% {
-            opacity: 0;
-            transform: scale(0.9);
-          }
-        }
-      `}</style>
     </div>
   );
 };

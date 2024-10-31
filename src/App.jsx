@@ -24,7 +24,14 @@ function App() {
           <Route path="/settings" element={<Settings />} />
 
           {/* Fallback for unmatched routes */}
-          <Route path="*" element={<div>Page not found</div>} />
+          <Route
+            path="*"
+            element={
+              <div className="flex items-center justify-center h-screen text-3xl font-semibold text-gray-600">
+                Page not found
+              </div>
+            }
+          />
         </Routes>
       </div>
     </Router>

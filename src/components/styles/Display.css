@@ -22,11 +22,12 @@
 
 /* Attendee name styling */
 .attendee-name {
-  font-size: 7rem;
+  font-size: 4.5rem;
   font-weight: bold;
   z-index: 10;
   animation: fadeInOut 5000ms ease-in-out;
-  margin-bottom: 1.5em;
+  font-family: Arial, Helvetica, sans-serif;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4); /* Add text shadow */
 }
 
 /* Empty view image */
@@ -34,7 +35,6 @@
   width: 50%;
   max-width: 100%;
   z-index: 10;
-  margin-bottom: 8em;
 }
 
 /* Animation */

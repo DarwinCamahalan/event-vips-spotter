@@ -8,15 +8,6 @@ const AddAttendeeRow = ({
   setInputValue,
   commonPadding,
 }) => {
-  // Function to convert to sentence case
-  const toSentenceCase = (str) => {
-    return str
-      .toLowerCase()
-      .split(" ")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
-  };
-
   return (
     <div className="mb-4">
       <h3 className="text-lg font-semibold mb-2 hidden md:block">
@@ -34,8 +25,9 @@ const AddAttendeeRow = ({
           type="text"
           className="border border-gray-300 rounded p-2 flex-grow"
           placeholder="Enter name"
+          style={{ textTransform: "uppercase" }} // Display in uppercase
           value={inputValue}
-          onChange={(e) => setInputValue(toSentenceCase(e.target.value))} // Apply sentence case here
+          onChange={(e) => setInputValue(e.target.value.toUpperCase())} // Convert to uppercase on change
           onKeyDown={(e) => {
             if (e.key === "Enter") {
               addAttendee();

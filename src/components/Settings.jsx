@@ -39,14 +39,6 @@ const Settings = () => {
     });
   }, []);
 
-  const toSentenceCase = (str) => {
-    return str
-      .toLowerCase()
-      .split(" ")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
-  };
-
   const showModal = (status, title, description) => {
     setModalStatus(status);
     setModalTitle(title);
@@ -55,11 +47,11 @@ const Settings = () => {
   };
 
   const addAttendee = () => {
-    const formattedName = toSentenceCase(inputValue);
-    if (!formattedName.trim()) return;
+    const formattedName = inputValue.trim().toUpperCase(); // Ensure uppercase name
+    if (!formattedName) return;
 
     const isDuplicate = attendees.some(
-      (attendee) => attendee.name.toLowerCase() === formattedName.toLowerCase()
+      (attendee) => attendee.name === formattedName
     );
 
     if (isDuplicate) {
@@ -82,17 +74,17 @@ const Settings = () => {
     const attendeesRef = ref(database, "attendees");
 
     const existingNames = attendees.map((attendee) =>
-      attendee.name.toLowerCase()
+      attendee.name.toUpperCase()
     );
     const newAttendees = [];
     const duplicateNames = [];
 
     attendeesArray.forEach((attendee) => {
-      const attendeeName = attendee.name.toLowerCase();
+      const attendeeName = attendee.name.toUpperCase(); // Ensure uppercase
       if (existingNames.includes(attendeeName)) {
-        duplicateNames.push(attendee.name);
+        duplicateNames.push(attendeeName);
       } else {
-        newAttendees.push(attendee);
+        newAttendees.push({ ...attendee, name: attendeeName });
       }
     });
 
@@ -129,17 +121,17 @@ const Settings = () => {
       }
 
       const existingNames = attendees.map((attendee) =>
-        attendee.name.toLowerCase()
+        attendee.name.toUpperCase()
       );
       const newAttendees = [];
       const duplicateNames = [];
 
       parsedData.forEach((attendee) => {
-        const attendeeName = attendee.name.toLowerCase();
+        const attendeeName = attendee.name.toUpperCase(); // Ensure uppercase
         if (existingNames.includes(attendeeName)) {
-          duplicateNames.push(attendee.name);
+          duplicateNames.push(attendeeName);
         } else {
-          newAttendees.push(attendee);
+          newAttendees.push({ ...attendee, name: attendeeName });
         }
       });
 

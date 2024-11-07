@@ -49,13 +49,13 @@ const PresentModal = ({ onComplete }) => {
   }, [names]);
 
   return (
-    <div className="modal-background">
+    <>
       {names.length > 0 ? (
-        <div className="modal-name">{names[currentNameIndex]?.name}</div>
-      ) : (
-        <p>No attendees to display.</p>
-      )}
-    </div>
+        <div className="modal-background">
+          <div className="modal-name">{names[currentNameIndex]?.name}</div>
+        </div>
+      ) : null}
+    </>
   );
 };
 

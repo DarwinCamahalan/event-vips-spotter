@@ -1,6 +1,6 @@
 // src/components/Spotter.jsx
 import React, { useState, useEffect } from "react";
-import { ref, onValue, update } from "firebase/database";
+import { ref, onValue, update, set } from "firebase/database";
 import { database } from "../firebase";
 import { FaCog, FaUserCheck, FaSearch } from "react-icons/fa";
 import DynamicModal from "./DynamicModal";
@@ -52,11 +52,31 @@ const Spotter = () => {
       return a.status === b.status ? 0 : a.status ? 1 : -1;
     });
 
-  // Mark the attendee as present
+  // Mark the attendee as present and add to "current-present-attendee" node
   const markAsPresent = (attendeeId, attendeeName) => {
     const attendeeRef = ref(database, `attendees/${attendeeId}`);
-    update(attendeeRef, { status: true });
-    showModal("Attendee Marked as Present", `${attendeeName} is now present.`);
+    const currentPresentRef = ref(
+      database,
+      `current-present-attendee/${attendeeId}`
+    );
+
+    // Update the attendee's status in the "attendees" node
+    update(attendeeRef, { status: true })
+      .then(() => {
+        // Add the attendee's info to "current-present-attendee" node
+        set(currentPresentRef, {
+          name: attendeeName,
+          markedPresentAt: new Date().toISOString(),
+        });
+        showModal(
+          "Attendee Marked as Present",
+          `${attendeeName} is now present.`
+        );
+      })
+      .catch((error) => {
+        console.error("Error updating attendee status:", error);
+        showModal("Error", "Failed to mark attendee as present.");
+      });
   };
 
   const commonPadding = "py-2 px-4";

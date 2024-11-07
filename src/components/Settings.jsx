@@ -221,7 +221,7 @@ const Settings = () => {
 
   return (
     <div className="mx-auto lg:p-4 md:p-0">
-      <div className="bg-white shadow-md rounded-lg p-4 max-w-4xl mx-auto">
+      <div className="bg-white border shadow-md rounded-lg p-4 max-w-4xl mx-auto">
         <HeaderRow commonPadding={commonPadding} />
 
         <SearchAndFilter

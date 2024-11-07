@@ -31,6 +31,7 @@
   padding: 10px;
   /* Make font size responsive based on viewport width */
   font-size: 10vw; /* 10% of the viewport width */
+  text-align: center !important;
 }
 
 /* Large screens: Larger font size */

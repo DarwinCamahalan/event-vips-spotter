@@ -1,11 +1,11 @@
-/* GIF Background */
-.gif-background {
+/* Video Background */
+.video-background {
   position: absolute;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  object-fit: fill;
+  object-fit: cover; /* Ensure the video covers the entire screen */
   z-index: -10;
 }
 
@@ -22,12 +22,43 @@
 
 /* Attendee name styling */
 .attendee-name {
-  font-size: 4.5rem;
   font-weight: bold;
   z-index: 10;
   animation: fadeInOut 5000ms ease-in-out;
   font-family: Arial, Helvetica, sans-serif;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4); /* Add text shadow */
+  white-space: nowrap; /* Prevent text from wrapping */
+  padding: 10px;
+  /* Make font size responsive based on viewport width */
+  font-size: 10vw; /* 10% of the viewport width */
+}
+
+/* Large screens: Larger font size */
+@media (min-width: 1200px) {
+  .attendee-name {
+    font-size: 4.5rem; /* Large fixed size for large screens */
+  }
+}
+
+/* Medium screens: Medium font size */
+@media (max-width: 1199px) and (min-width: 768px) {
+  .attendee-name {
+    font-size: 6vw; /* Use vw for medium-sized screens */
+  }
+}
+
+/* Small screens: Smaller font size */
+@media (max-width: 767px) {
+  .attendee-name {
+    font-size: 8vw; /* Use vw for small screens */
+  }
+}
+
+/* Extra small screens: Even smaller font size */
+@media (max-width: 480px) {
+  .attendee-name {
+    font-size: 10vw; /* Larger percentage of the viewport width for very small screens */
+  }
 }
 
 /* Empty view image */

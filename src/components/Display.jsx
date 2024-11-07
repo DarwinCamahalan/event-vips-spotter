@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useRef } from "react";
 import { ref, onValue } from "firebase/database";
 import { database } from "../firebase";
-import PresentModal from "./PresentModal"; // Import the PresentModal component
-import "./styles/Display.css"; // Import the CSS file
+import PresentModal from "./PresentModal";
+import "./styles/Display.css";
 
 const Display = () => {
   const [attendees, setAttendees] = useState([]);
   const [currentAttendeeIndex, setCurrentAttendeeIndex] = useState(0);
-  const [showModal, setShowModal] = useState(true); // Modal visibility state
+  const [showModal, setShowModal] = useState(true);
   const currentIndexRef = useRef(0);
   const displayDuration = 5000; // 5 seconds per attendee
 
@@ -26,7 +26,6 @@ const Display = () => {
 
       setAttendees(presentAttendees);
 
-      // Reset current index to start displaying the newly updated list
       if (presentAttendees.length > 0) {
         currentIndexRef.current = 0;
         setCurrentAttendeeIndex(0);
@@ -46,12 +45,12 @@ const Display = () => {
 
   return (
     <div className="display-container">
-      {/* GIF Background */}
-      <img
-        src="/bg.gif"
-        alt="Background Animation"
-        className="gif-background"
-      />
+      {/* Video Background */}
+      <video autoPlay loop muted playsInline className="video-background">
+        <source src="/bg.mp4" type="video/mp4" />
+        <source src="/bg.webm" type="video/webm" />
+        Your browser does not support the video tag.
+      </video>
 
       {/* Display PresentModal when showModal is true */}
       {showModal && <PresentModal onComplete={() => setShowModal(false)} />}

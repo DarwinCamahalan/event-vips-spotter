@@ -23,7 +23,7 @@
 /* Attendee name styling */
 .attendee-name {
   font-weight: bold;
-  z-index: 10;
+  z-index: 4;
   animation: fadeInOut 5000ms ease-in-out;
   font-family: Arial, Helvetica, sans-serif;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4); /* Add text shadow */

@@ -71,7 +71,10 @@ const PresentModal = ({ onComplete }) => {
               animateImages ? "slide-out" : ""
             }`}
           />
-          <div className="modal-name">{names[currentNameIndex]?.name}</div>
+          <div className="modal-content">
+            <div className="modal-title">PRESENT IN NSTW 2024</div>
+            <div className="modal-name">{names[currentNameIndex]?.name}</div>
+          </div>
         </div>
       ) : null}
     </>

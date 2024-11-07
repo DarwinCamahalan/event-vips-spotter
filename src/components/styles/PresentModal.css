@@ -50,9 +50,9 @@
 
 .modal-title {
   color: white;
-  font-size: 2.7vw;
+  font-size: 3vw;
   position: absolute;
-  top: 33%;
+  top: 20%;
   font-weight: bold;
   text-align: center;
   animation: fade 2s ease-in-out;
@@ -60,6 +60,7 @@
 }
 
 .modal-name {
+  position: relative;
   color: white;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4); /* Add text shadow */
   font-size: 5vw;

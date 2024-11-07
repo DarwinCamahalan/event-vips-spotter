@@ -9,6 +9,8 @@ import {
 import Display from "./components/Display";
 import Spotter from "./components/Spotter";
 import Settings from "./components/Settings";
+import Seat1 from "./components/Seat1"; // Import Seat1 component
+import Seat2 from "./components/Seat2"; // Import Seat2 component
 
 function App() {
   return (
@@ -22,6 +24,10 @@ function App() {
           <Route path="/display" element={<Display />} />
           <Route path="/spotter" element={<Spotter />} />
           <Route path="/settings" element={<Settings />} />
+
+          {/* Define routes for seat1 and seat2 */}
+          <Route path="/seat1" element={<Seat1 />} />
+          <Route path="/seat2" element={<Seat2 />} />
 
           {/* Fallback for unmatched routes */}
           <Route

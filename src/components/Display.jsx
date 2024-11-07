@@ -1,7 +1,9 @@
+// src/components/Display.jsx
 import React, { useEffect, useState, useRef } from "react";
 import { ref, onValue } from "firebase/database";
 import { database } from "../firebase";
 import PresentModal from "./PresentModal";
+import Properties from "./Properties"; // Import the Properties component
 import "./styles/Display.css";
 
 const Display = () => {
@@ -54,6 +56,11 @@ const Display = () => {
 
       {/* Display PresentModal when showModal is true */}
       {showModal && <PresentModal onComplete={() => setShowModal(false)} />}
+
+      {/* Properties Component (appears on hover over the top-left corner) */}
+      <div className="properties-main">
+        <Properties />
+      </div>
 
       {attendees.length > 0 ? (
         <div

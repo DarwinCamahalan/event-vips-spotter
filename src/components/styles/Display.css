@@ -27,11 +27,47 @@
   animation: fadeInOut 5000ms ease-in-out;
   font-family: Arial, Helvetica, sans-serif;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4); /* Add text shadow */
-  white-space: nowrap; /* Prevent text from wrapping */
   padding: 10px;
   /* Make font size responsive based on viewport width */
   font-size: 10vw; /* 10% of the viewport width */
   text-align: center !important;
+}
+
+.properties-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: none;
+  background-color: rgba(0, 0, 0, 0.603); /* Transparent black */
+  padding: 8px 8px;
+  z-index: 10;
+  flex-direction: row;
+}
+
+.property-button {
+  background-color: transparent;
+  color: white;
+  border: 1px solid white;
+  padding: 5px 10px;
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.property-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.properties-main {
+  width: 11%;
+  height: 10px;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.properties-main:hover .properties-container {
+  display: flex;
 }
 
 /* Large screens: Larger font size */

@@ -1,11 +1,13 @@
 import React, { useEffect, useState, useRef } from "react";
 import { ref, onValue } from "firebase/database";
 import { database } from "../firebase";
+import PresentModal from "./PresentModal"; // Import the PresentModal component
 import "./styles/Display.css"; // Import the CSS file
 
 const Display = () => {
   const [attendees, setAttendees] = useState([]);
   const [currentAttendeeIndex, setCurrentAttendeeIndex] = useState(0);
+  const [showModal, setShowModal] = useState(true); // Modal visibility state
   const currentIndexRef = useRef(0);
   const displayDuration = 5000; // 5 seconds per attendee
 
@@ -50,6 +52,9 @@ const Display = () => {
         alt="Background Animation"
         className="gif-background"
       />
+
+      {/* Display PresentModal when showModal is true */}
+      {showModal && <PresentModal onComplete={() => setShowModal(false)} />}
 
       {attendees.length > 0 ? (
         <div

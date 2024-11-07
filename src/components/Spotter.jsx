@@ -1,6 +1,6 @@
 // src/components/Spotter.jsx
 import React, { useState, useEffect } from "react";
-import { ref, onValue, update, set } from "firebase/database";
+import { ref, onValue, update, set, push } from "firebase/database";
 import { database } from "../firebase";
 import { FaCog, FaUserCheck, FaSearch } from "react-icons/fa";
 import DynamicModal from "./DynamicModal";
@@ -53,18 +53,16 @@ const Spotter = () => {
     });
 
   // Mark the attendee as present and add to "current-present-attendee" node
+
   const markAsPresent = (attendeeId, attendeeName) => {
     const attendeeRef = ref(database, `attendees/${attendeeId}`);
-    const currentPresentRef = ref(
-      database,
-      `current-present-attendee/${attendeeId}`
-    );
+    const currentPresentRef = ref(database, `current-present-attendee`);
 
     // Update the attendee's status in the "attendees" node
     update(attendeeRef, { status: true })
       .then(() => {
-        // Add the attendee's info to "current-present-attendee" node
-        set(currentPresentRef, {
+        // Push the attendee's info to "current-present-attendees" node
+        push(currentPresentRef, {
           name: attendeeName,
           markedPresentAt: new Date().toISOString(),
         });

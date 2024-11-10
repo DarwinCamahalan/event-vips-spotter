@@ -50,20 +50,35 @@ const Spotter = () => {
     });
   }, []);
 
-  const markAsPresent = (id, name) => {
-    // Update the attendee's status in Firebase
-    const attendeeRef = ref(database, `attendees/${id}`);
+  const markAsPresent = (attendeeId, attendeeName) => {
+    const attendeeRef = ref(database, `attendees/${attendeeId}`);
+    const currentPresentRef = ref(database, `current-present-attendee`);
+    const notificationsRef = ref(database, "notifications");
+
+    // Update the attendee's status in the "attendees" node
     update(attendeeRef, { status: true })
       .then(() => {
-        // Add a notification to Firebase
-        const notificationsRef = ref(database, "notifications");
-        push(notificationsRef, {
-          message: `${name} is now present`,
-          timestamp: Date.now(),
+        // Push the attendee's info to both current-present-attendee and notifications nodes
+        const timestamp = new Date().toISOString();
+
+        push(currentPresentRef, {
+          name: attendeeName,
+          markedPresentAt: timestamp,
         });
+
+        push(notificationsRef, {
+          message: `${attendeeName} is now present.`,
+          timestamp: timestamp,
+        });
+
+        showModal(
+          "Attendee Marked as Present",
+          `${attendeeName} is now present.`
+        );
       })
       .catch((error) => {
         console.error("Error updating attendee status:", error);
+        showModal("Error", "Failed to mark attendee as present.");
       });
   };
 

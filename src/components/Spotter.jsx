@@ -1,6 +1,6 @@
 // src/components/Spotter.jsx
 import React, { useState, useEffect } from "react";
-import { ref, onValue, update, set, push } from "firebase/database";
+import { ref, onValue, push, update, remove } from "firebase/database";
 import { database } from "../firebase";
 import { FaCog, FaUserCheck, FaSearch } from "react-icons/fa";
 import DynamicModal from "./DynamicModal";
@@ -12,7 +12,6 @@ const Spotter = () => {
   const [modalTitle, setModalTitle] = useState("");
   const [modalDescription, setModalDescription] = useState("");
   const [filter, setFilter] = useState("all");
-  const [modalMessage, setModalMessage] = useState("");
 
   // Fetch attendees from Firebase
   useEffect(() => {
@@ -35,22 +34,43 @@ const Spotter = () => {
     onValue(notificationsRef, (snapshot) => {
       const data = snapshot.val();
       if (data) {
-        const latestNotification = Object.values(data).pop();
+        const latestNotificationKey = Object.keys(data).pop();
+        const latestNotification = data[latestNotificationKey];
         setModalTitle("Notification");
         setModalDescription(latestNotification.message);
         setModalVisible(true);
+
+        // Remove the notification after displaying it
+        const notificationRef = ref(
+          database,
+          `notifications/${latestNotificationKey}`
+        );
+        remove(notificationRef);
       }
     });
   }, []);
 
-  // Show modal function
-  const showModal = (title, description) => {
-    setModalTitle(title);
-    setModalDescription(description);
-    setModalVisible(true);
+  const markAsPresent = (id, name) => {
+    // Update the attendee's status in Firebase
+    const attendeeRef = ref(database, `attendees/${id}`);
+    update(attendeeRef, { status: true })
+      .then(() => {
+        // Add a notification to Firebase
+        const notificationsRef = ref(database, "notifications");
+        push(notificationsRef, {
+          message: `${name} is now present`,
+          timestamp: Date.now(),
+        });
+      })
+      .catch((error) => {
+        console.error("Error updating attendee status:", error);
+      });
   };
 
-  // Function to filter attendees based on search term and selected filter, and move present attendees to the bottom
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  };
+
   const filteredAttendees = attendees
     .filter((attendee) => {
       const matchesSearch = attendee.name
@@ -67,46 +87,6 @@ const Spotter = () => {
       return a.status === b.status ? 0 : a.status ? 1 : -1;
     });
 
-  // Mark the attendee as present and add to "current-present-attendee" node
-
-  const markAsPresent = (attendeeId, attendeeName) => {
-    const attendeeRef = ref(database, `attendees/${attendeeId}`);
-    const currentPresentRef = ref(database, `current-present-attendee`);
-
-    // Update the attendee's status in the "attendees" node
-    update(attendeeRef, { status: true })
-      .then(() => {
-        // Push the attendee's info to "current-present-attendees" node
-        push(currentPresentRef, {
-          name: attendeeName,
-          markedPresentAt: new Date().toISOString(),
-        });
-        showModal(
-          "Attendee Marked as Present",
-          `${attendeeName} is now present.`
-        );
-        setModalMessage(`${attendeeName} is now present`);
-        setModalVisible(true);
-      })
-      .catch((error) => {
-        console.error("Error updating attendee status:", error);
-        showModal("Error", "Failed to mark attendee as present.");
-      });
-
-    // Add a notification to Firebase
-    const notificationsRef = ref(database, "notifications");
-    push(notificationsRef, {
-      message: `${attendeeName} is now present`,
-      timestamp: Date.now(),
-    });
-  };
-
-  const handleCloseModal = () => {
-    setModalVisible(false);
-  };
-
-  const commonPadding = "py-2 px-4";
-
   return (
     <div className="mx-auto lg:p-4 md:p-0">
       <div className="bg-white shadow-md rounded-lg p-4 max-w-4xl mx-auto">
@@ -115,7 +95,7 @@ const Spotter = () => {
           <h2 className="text-2xl font-bold">Spotter</h2>
           <button
             onClick={() => (window.location.href = "/settings")}
-            className={`flex items-center bg-gray-800 text-white ${commonPadding} rounded hover:bg-gray-700`}
+            className={`flex items-center bg-gray-800 text-white py-2 px-4 rounded hover:bg-gray-700`}
           >
             <FaCog className="mr-2" /> Settings
           </button>
@@ -217,7 +197,7 @@ const Spotter = () => {
                             onClick={() =>
                               markAsPresent(attendee.id, attendee.name)
                             }
-                            className={`flex items-center ${commonPadding} rounded ${
+                            className={`flex items-center py-2 px-4 rounded ${
                               attendee.status
                                 ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                                 : "bg-green-700 hover:bg-green-600 text-white"
@@ -277,7 +257,7 @@ const Spotter = () => {
                         onClick={() =>
                           markAsPresent(attendee.id, attendee.name)
                         }
-                        className={`w-full flex items-center justify-center ${commonPadding} rounded ${
+                        className={`w-full flex items-center justify-center py-2 px-4 rounded ${
                           attendee.status
                             ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                             : "bg-green-700 hover:bg-green-600 text-white"
@@ -300,16 +280,8 @@ const Spotter = () => {
         {/* Modal */}
         {modalVisible && (
           <DynamicModal
-            status="success"
             title={modalTitle}
             description={modalDescription}
-            onClose={() => setModalVisible(false)}
-          />
-        )}
-        {modalVisible && (
-          <DynamicModal
-            title="Notification"
-            description={modalMessage}
             onClose={handleCloseModal}
             type="info"
           />

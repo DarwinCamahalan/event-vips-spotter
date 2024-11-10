@@ -29,6 +29,20 @@ const Spotter = () => {
     });
   }, []);
 
+  // Fetch notifications from Firebase
+  useEffect(() => {
+    const notificationsRef = ref(database, "notifications");
+    onValue(notificationsRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const latestNotification = Object.values(data).pop();
+        setModalTitle("Notification");
+        setModalDescription(latestNotification.message);
+        setModalVisible(true);
+      }
+    });
+  }, []);
+
   // Show modal function
   const showModal = (title, description) => {
     setModalTitle(title);
@@ -78,6 +92,13 @@ const Spotter = () => {
         console.error("Error updating attendee status:", error);
         showModal("Error", "Failed to mark attendee as present.");
       });
+
+    // Add a notification to Firebase
+    const notificationsRef = ref(database, "notifications");
+    push(notificationsRef, {
+      message: `${attendeeName} is now present`,
+      timestamp: Date.now(),
+    });
   };
 
   const handleCloseModal = () => {

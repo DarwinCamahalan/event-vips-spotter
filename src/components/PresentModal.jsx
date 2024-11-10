@@ -9,7 +9,7 @@ const PresentModal = ({ onComplete }) => {
   const [currentNameIndex, setCurrentNameIndex] = useState(0);
   const currentIndexRef = useRef(0);
   const confettiCanvasRef = useRef(null);
-  const displayDuration = 5000; // 5 seconds per name
+  const displayDuration = 6000; // 5 seconds per name
 
   useEffect(() => {
     const presentRef = ref(database, "current-present-attendee");
@@ -89,10 +89,21 @@ const PresentModal = ({ onComplete }) => {
       {names.length > 0 ? (
         <div className="modal-background">
           <canvas ref={confettiCanvasRef} className="confetti-canvas"></canvas>
+          <img src="/empty_view.png" alt="Top Image" className="top-image" />
           <div className="modal-content">
-            <div className="modal-title">NOW PRESENT IN NSTW 2024</div>
+            <div className="modal-title">NOW PRESENT IN THE EVENT</div>
             <div className="modal-name">{names[currentNameIndex]?.name}</div>
           </div>
+          <img
+            src="/ino.png"
+            alt="Left Bottom Image"
+            className="bottom-left-image"
+          />
+          <img
+            src="/ina.png"
+            alt="Right Bottom Image"
+            className="bottom-right-image"
+          />
         </div>
       ) : null}
     </>

@@ -4,7 +4,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.98);
+  background-color: rgba(0, 0, 0, 0.96);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -30,11 +30,35 @@
   z-index: 15; /* Ensure it’s above the modal background */
 }
 
-.modal-title {
-  color: white;
-  font-size: 3vw;
+.top-image {
   position: absolute;
-  top: 20%;
+  top: 7%;
+  max-width: 18%; /* Adjust size as needed */
+  z-index: 16;
+}
+
+.bottom-left-image {
+  transform: rotate(15deg);
+  position: absolute;
+  bottom: -7% !important;
+  left: -1%;
+  max-width: 13%; /* Adjust size as needed */
+  z-index: 16;
+}
+
+.bottom-right-image {
+  transform: rotate(-10deg);
+  position: absolute;
+  bottom: -8% !important;
+  right: -1%;
+  max-width: 13%; /* Adjust size as needed */
+  z-index: 16;
+}
+
+.modal-title {
+  font-size: 2.5vw;
+  position: absolute;
+  top: 31%; /* Adjust to avoid overlap with top image */
   font-weight: bold;
   text-align: center;
   animation: fade 1s ease-in-out;

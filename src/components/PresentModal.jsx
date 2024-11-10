@@ -94,6 +94,16 @@ const PresentModal = ({ onComplete }) => {
             <div className="modal-title">NOW PRESENT IN THE EVENT</div>
             <div className="modal-name">{names[currentNameIndex]?.name}</div>
           </div>
+          <img
+            src="/ino.png"
+            alt="Left Bottom Image"
+            className="bottom-left-image"
+          />
+          <img
+            src="/ina.png"
+            alt="Right Bottom Image"
+            className="bottom-right-image"
+          />
         </div>
       ) : null}
     </>

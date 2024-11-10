@@ -37,6 +37,26 @@
   z-index: 16;
 }
 
+.bottom-left-image {
+  transform: rotate(15deg);
+  position: absolute;
+  bottom: -6% !important; /* Maintain specific bottom positioning */
+  left: 0% !important; /* Maintain specific left positioning */
+  width: 200px; /* Set a fixed size to maintain consistency */
+  height: auto; /* Maintain aspect ratio */
+  z-index: 16;
+}
+
+.bottom-right-image {
+  transform: rotate(-10deg);
+  position: absolute;
+  bottom: -8% !important; /* Maintain specific bottom positioning */
+  right: 0% !important; /* Maintain specific right positioning */
+  width: 200px; /* Set a fixed size to maintain consistency */
+  height: auto; /* Maintain aspect ratio */
+  z-index: 16;
+}
+
 /* Responsive styles for modal-title */
 .modal-title {
   font-weight: bold;

@@ -99,8 +99,8 @@
 
 /* Empty view image */
 .empty-view {
-  width: 50%;
-  max-width: 100%;
+  width: 600px;
+
   z-index: 10;
 }
 

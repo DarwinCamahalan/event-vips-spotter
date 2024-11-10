@@ -33,47 +33,83 @@
 .top-image {
   position: absolute;
   top: 7%;
-  max-width: 18%; /* Adjust size as needed */
+  max-width: 25em; /* Adjust size as needed */
   z-index: 16;
 }
 
-.bottom-left-image {
-  transform: rotate(15deg);
-  position: absolute;
-  bottom: -7% !important;
-  left: -1%;
-  max-width: 13%; /* Adjust size as needed */
-  z-index: 16;
-}
-
-.bottom-right-image {
-  transform: rotate(-10deg);
-  position: absolute;
-  bottom: -8% !important;
-  right: -1%;
-  max-width: 13%; /* Adjust size as needed */
-  z-index: 16;
-}
-
+/* Responsive styles for modal-title */
 .modal-title {
-  font-size: 2.5vw;
+  font-weight: bold;
   position: absolute;
   top: 31%; /* Adjust to avoid overlap with top image */
-  font-weight: bold;
   text-align: center;
   animation: fade 1s ease-in-out;
   color: rgb(130, 217, 0);
+  font-size: 8vw; /* Default for very small screens */
+}
+
+/* Large screens */
+@media (min-width: 1200px) {
+  .modal-title {
+    font-size: 3rem; /* Fixed size for large screens */
+  }
+}
+
+/* Medium screens */
+@media (max-width: 1199px) and (min-width: 768px) {
+  .modal-title {
+    font-size: 4vw; /* Use vw for medium-sized screens */
+  }
+}
+
+/* Small screens */
+@media (max-width: 767px) {
+  .modal-title {
+    font-size: 6vw; /* Use vw for small screens */
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+  .modal-title {
+    font-size: 8vw; /* Use vw for very small screens */
+  }
 }
 
 .modal-name {
-  position: relative;
-  color: white;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4); /* Add text shadow */
-  font-size: 5vw;
-  text-align: center;
-  font-weight: bolder;
+  font-weight: bold;
+  z-index: 4;
   animation: fade 1.3s ease-in-out;
-  z-index: 13; /* Above cover images */
+  font-family: Arial, Helvetica, sans-serif;
+  padding: 0px 10px;
+  line-height: 1.1em;
+  font-size: 10vw; /* 10% of the viewport width */
+  text-align: center !important;
+}
+
+/* Responsive styles for modal-name */
+@media (min-width: 1200px) {
+  .modal-name {
+    font-size: 4.5rem; /* Fixed size for large screens */
+  }
+}
+
+@media (max-width: 1199px) and (min-width: 768px) {
+  .modal-name {
+    font-size: 6vw; /* Use vw for medium-sized screens */
+  }
+}
+
+@media (max-width: 767px) {
+  .modal-name {
+    font-size: 8vw; /* Use vw for small screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-name {
+    font-size: 10vw; /* Larger percentage of the viewport width for very small screens */
+  }
 }
 
 @keyframes fade {

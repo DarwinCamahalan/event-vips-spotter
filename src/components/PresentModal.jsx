@@ -40,7 +40,7 @@ const PresentModal = ({ onComplete }) => {
           `current-present-attendee/${currentId}`
         );
         remove(nameToRemove)
-          .then(() => console.log("Name removed from Firebase:", currentId))
+          .then(() => console.log("", currentId))
           .catch((error) => console.error("Error removing name:", error));
       }, displayDuration);
 
@@ -94,16 +94,6 @@ const PresentModal = ({ onComplete }) => {
             <div className="modal-title">NOW PRESENT IN THE EVENT</div>
             <div className="modal-name">{names[currentNameIndex]?.name}</div>
           </div>
-          <img
-            src="/ino.png"
-            alt="Left Bottom Image"
-            className="bottom-left-image"
-          />
-          <img
-            src="/ina.png"
-            alt="Right Bottom Image"
-            className="bottom-right-image"
-          />
         </div>
       ) : null}
     </>

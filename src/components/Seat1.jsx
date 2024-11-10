@@ -1,5 +1,5 @@
-// src/components/Seat2.jsx
 import React from "react";
+import Properties from "./Properties";
 
 const Seat2 = () => {
   return (
@@ -13,6 +13,9 @@ const Seat2 = () => {
         overflow: "hidden", // Prevent any overflow if the image is large
       }}
     >
+      <div className="properties-main">
+        <Properties />
+      </div>
       <img
         src="/seat1.jpeg"
         alt="Seat 1"

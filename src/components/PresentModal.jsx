@@ -8,7 +8,6 @@ const PresentModal = ({ onComplete }) => {
   const [currentNameIndex, setCurrentNameIndex] = useState(0);
   const currentIndexRef = useRef(0);
   const displayDuration = 5000; // 6 seconds per name
-  const [animateImages, setAnimateImages] = useState(false);
 
   useEffect(() => {
     const presentRef = ref(database, "current-present-attendee");
@@ -21,7 +20,6 @@ const PresentModal = ({ onComplete }) => {
 
       currentIndexRef.current = 0;
       setCurrentNameIndex(0);
-      setAnimateImages(false);
 
       setTimeout(() => setAnimateImages(true), 500); // Start animation after a delay
     });
@@ -32,8 +30,6 @@ const PresentModal = ({ onComplete }) => {
       if (names.length > 0) {
         const currentId = names[currentIndexRef.current].id;
 
-        // Reset animation, trigger it for the next name
-        setAnimateImages(false);
         setTimeout(() => setAnimateImages(true), 500);
 
         // Move to the next name and remove current one from Firebase

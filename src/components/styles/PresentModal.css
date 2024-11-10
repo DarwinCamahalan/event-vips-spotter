@@ -12,34 +12,6 @@
   overflow: hidden;
 }
 
-.cover-image {
-  position: absolute;
-  top: 0;
-  width: 50%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 1s ease-in-out;
-  z-index: 15;
-}
-
-.left-image {
-  left: 0;
-  transform: translateX(0); /* Initial position */
-}
-
-.right-image {
-  right: 0;
-  transform: translateX(0); /* Initial position */
-}
-
-.slide-out.left-image {
-  transform: translateX(-100%); /* Slide left out of view */
-}
-
-.slide-out.right-image {
-  transform: translateX(100%); /* Slide right out of view */
-}
-
 .modal-content {
   display: flex;
   flex-direction: column;

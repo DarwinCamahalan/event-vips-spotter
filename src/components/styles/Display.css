@@ -5,7 +5,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  object-fit: cover; /* Ensure the video covers the entire screen */
+  object-fit: fill; /* Ensure the video covers the entire screen */
   z-index: -10;
 }
 
@@ -28,7 +28,7 @@
   font-family: Arial, Helvetica, sans-serif;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4); /* Add text shadow */
   padding: 10px;
-  /* Make font size responsive based on viewport width */
+  line-height: 1.1em;
   font-size: 10vw; /* 10% of the viewport width */
   text-align: center !important;
 }

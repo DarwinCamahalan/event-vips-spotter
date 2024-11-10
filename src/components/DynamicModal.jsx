@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   FaCheckCircle,
   FaTimesCircle,
@@ -6,10 +6,18 @@ import {
   FaExclamationTriangle,
 } from "react-icons/fa"; // Icons for different statuses
 
-const DynamicModal = ({ status, title, description, onClose }) => {
+const DynamicModal = ({ title, description, onClose, type }) => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onClose();
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [onClose]);
+
   // Determine the icon and color based on the status
   const getStatusIcon = () => {
-    switch (status) {
+    switch (type) {
       case "success":
         return <FaCheckCircle className="text-green-500" size={40} />;
       case "error":
@@ -25,7 +33,7 @@ const DynamicModal = ({ status, title, description, onClose }) => {
 
   // Determine the button color based on the status
   const getButtonClasses = () => {
-    switch (status) {
+    switch (type) {
       case "success":
         return "bg-green-600 hover:bg-green-700";
       case "error":

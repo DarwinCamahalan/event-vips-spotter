@@ -57,20 +57,6 @@ const PresentModal = ({ onComplete }) => {
     <>
       {names.length > 0 ? (
         <div className="modal-background">
-          <img
-            src="/left-img.png"
-            alt="Left cover"
-            className={`cover-image left-image ${
-              animateImages ? "slide-out" : ""
-            }`}
-          />
-          <img
-            src="/right-img.png"
-            alt="Right cover"
-            className={`cover-image right-image ${
-              animateImages ? "slide-out" : ""
-            }`}
-          />
           <div className="modal-content">
             <div className="modal-title">NOW PRESENT IN NSTW 2024</div>
             <div className="modal-name">{names[currentNameIndex]?.name}</div>

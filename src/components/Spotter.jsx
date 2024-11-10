@@ -12,6 +12,7 @@ const Spotter = () => {
   const [modalTitle, setModalTitle] = useState("");
   const [modalDescription, setModalDescription] = useState("");
   const [filter, setFilter] = useState("all");
+  const [modalMessage, setModalMessage] = useState("");
 
   // Fetch attendees from Firebase
   useEffect(() => {
@@ -70,11 +71,17 @@ const Spotter = () => {
           "Attendee Marked as Present",
           `${attendeeName} is now present.`
         );
+        setModalMessage(`${attendeeName} is now present`);
+        setModalVisible(true);
       })
       .catch((error) => {
         console.error("Error updating attendee status:", error);
         showModal("Error", "Failed to mark attendee as present.");
       });
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
   };
 
   const commonPadding = "py-2 px-4";
@@ -276,6 +283,14 @@ const Spotter = () => {
             title={modalTitle}
             description={modalDescription}
             onClose={() => setModalVisible(false)}
+          />
+        )}
+        {modalVisible && (
+          <DynamicModal
+            title="Notification"
+            description={modalMessage}
+            onClose={handleCloseModal}
+            type="info"
           />
         )}
       </div>

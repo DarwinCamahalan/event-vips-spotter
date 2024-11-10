@@ -259,6 +259,7 @@ const Settings = () => {
             title={modalTitle}
             description={modalDescription}
             onClose={() => setModalVisible(false)}
+            type={"info"}
           />
         )}
 

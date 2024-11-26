@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { ref, onValue, push, update, remove } from "firebase/database";
 import { database } from "../firebase";
-import { FaCog, FaUserCheck, FaSearch } from "react-icons/fa";
+import { FaCog, FaUserCheck, FaSearch, FaSort } from "react-icons/fa";
 import DynamicModal from "./DynamicModal";
 
 const Spotter = () => {
@@ -12,6 +12,8 @@ const Spotter = () => {
   const [modalTitle, setModalTitle] = useState("");
   const [modalDescription, setModalDescription] = useState("");
   const [filter, setFilter] = useState("all");
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [sortedAttendees, setSortedAttendees] = useState([]);
 
   // Fetch attendees from Firebase
   useEffect(() => {
@@ -25,6 +27,7 @@ const Spotter = () => {
           }))
         : [];
       setAttendees(attendeesList);
+      setSortedAttendees(attendeesList);
     });
   }, []);
 
@@ -45,7 +48,7 @@ const Spotter = () => {
           database,
           `notifications/${latestNotificationKey}`
         );
-        remove(notificationRef);
+        notificationRef.remove();
       }
     });
   }, []);
@@ -86,7 +89,18 @@ const Spotter = () => {
     setModalVisible(false);
   };
 
-  const filteredAttendees = attendees
+  const handleSort = (criteria) => {
+    let sorted;
+    if (criteria === "name-asc") {
+      sorted = [...attendees].sort((a, b) => a.name.localeCompare(b.name));
+    } else if (criteria === "name-desc") {
+      sorted = [...attendees].sort((a, b) => b.name.localeCompare(a.name));
+    }
+    setSortedAttendees(sorted);
+    setShowDropdown(false);
+  };
+
+  const filteredAttendees = sortedAttendees
     .filter((attendee) => {
       const matchesSearch = attendee.name
         .toLowerCase()
@@ -117,7 +131,7 @@ const Spotter = () => {
         </div>
 
         {/* Search Input */}
-        <div className="mb-4 relative">
+        <div className="mb-4 relative flex items-center">
           <span className="absolute inset-y-0 left-0 flex items-center pl-3">
             <FaSearch className="text-gray-500" />
           </span>
@@ -128,6 +142,33 @@ const Spotter = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
+          <div className="relative ml-1">
+            <button
+              className="border border-gray-300 rounded p-2 flex items-center w-[6rem] justify-center"
+              onClick={() => setShowDropdown(!showDropdown)}
+            >
+              <FaSort className="mr-2" />
+              Sort By
+            </button>
+            {showDropdown && (
+              <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded shadow-lg">
+                <ul>
+                  <li
+                    className="p-2 hover:bg-gray-100 cursor-pointer"
+                    onClick={() => handleSort("name-asc")}
+                  >
+                    Name (A-Z)
+                  </li>
+                  <li
+                    className="p-2 hover:bg-gray-100 cursor-pointer"
+                    onClick={() => handleSort("name-desc")}
+                  >
+                    Name (Z-A)
+                  </li>
+                </ul>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Filter Section */}
@@ -240,7 +281,7 @@ const Spotter = () => {
                   </span>
                   <hr className="flex-grow border-gray-300" />
                 </div>
-                {filteredAttendees.map((attendee) => (
+                {sortedAttendees.map((attendee) => (
                   <div
                     key={attendee.id}
                     className="bg-white border border-gray-300 shadow-md rounded-lg p-4 mb-4"
@@ -265,7 +306,6 @@ const Spotter = () => {
                         <span className="mx-2 text-gray-500 text-xs">
                           Actions
                         </span>
-                        <div className="flex-grow border-t border-gray-300"></div>
                       </div>
 
                       <button

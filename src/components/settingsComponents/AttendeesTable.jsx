@@ -32,21 +32,6 @@ const AttendeesTable = ({
         <hr className="flex-grow border-gray-300" />
       </div>
 
-      <div className="my-4">
-        <div className="relative">
-          <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <IoSearch className="text-gray-500" />
-          </span>
-          <input
-            type="text"
-            className="border border-gray-300 rounded pl-10 p-2 w-full"
-            placeholder="Search attendees..."
-            value={searchTerm}
-            onChange={handleSearchChange}
-          />
-        </div>
-      </div>
-
       {/* Display as a table for medium and larger screens */}
       <div className="hidden md:block">
         <table className="min-w-full table-fixed bg-white">

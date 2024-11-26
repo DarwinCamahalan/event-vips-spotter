@@ -27,23 +27,20 @@ const Display = () => {
         : [];
 
       setAttendees(presentAttendees);
-
-      if (presentAttendees.length > 0) {
-        currentIndexRef.current = 0;
-        setCurrentAttendeeIndex(0);
-      }
     });
   }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      currentIndexRef.current =
-        (currentIndexRef.current + 1) % attendees.length;
-      setCurrentAttendeeIndex(currentIndexRef.current);
+      if (attendees.length > 0) {
+        currentIndexRef.current =
+          (currentIndexRef.current + 1) % attendees.length;
+        setCurrentAttendeeIndex(currentIndexRef.current);
+      }
     }, displayDuration);
 
     return () => clearInterval(interval);
-  }, [attendees.length]);
+  }, [attendees]);
 
   return (
     <div className="display-container">

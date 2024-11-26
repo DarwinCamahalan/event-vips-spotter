@@ -1,6 +1,7 @@
 // AttendeesTable.jsx
-import React from "react";
+import React, { useState } from "react";
 import { FaTrash, FaUserXmark } from "react-icons/fa6";
+import { IoSearch } from "react-icons/io5";
 
 const AttendeesTable = ({
   attendees,
@@ -9,15 +10,41 @@ const AttendeesTable = ({
   confirmDelete,
   commonPadding,
 }) => {
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const filteredList = filteredAttendees.filter((attendee) =>
+    attendee.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="overflow-x-auto">
       <h3 className="text-lg font-semibold mb-2 hidden md:block">
         All Attendees
       </h3>
+
       <div className="flex mt-8 items-center mb-2 md:hidden">
         <hr className="flex-grow border-gray-300" />
         <span className="mx-4 font-semibold text-gray-700">All Attendees</span>
         <hr className="flex-grow border-gray-300" />
+      </div>
+
+      <div className="my-4">
+        <div className="relative">
+          <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <IoSearch className="text-gray-500" />
+          </span>
+          <input
+            type="text"
+            className="border border-gray-300 rounded pl-10 p-2 w-full"
+            placeholder="Search attendees..."
+            value={searchTerm}
+            onChange={handleSearchChange}
+          />
+        </div>
       </div>
 
       {/* Display as a table for medium and larger screens */}
@@ -31,7 +58,7 @@ const AttendeesTable = ({
             </tr>
           </thead>
           <tbody>
-            {filteredAttendees.map((attendee) => (
+            {filteredList.map((attendee) => (
               <tr key={attendee.id}>
                 <td className="py-2 px-4 border-b">{attendee.name}</td>
                 <td className="py-2 px-4 border-b">
@@ -74,7 +101,7 @@ const AttendeesTable = ({
 
       {/* Display as cards for smaller screens */}
       <div className="block md:hidden space-y-4">
-        {filteredAttendees.map((attendee) => (
+        {filteredList.map((attendee) => (
           <div
             key={attendee.id}
             className="bg-white border border-gray-300 shadow-md rounded-lg p-4 mb-4"

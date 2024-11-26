@@ -2,7 +2,13 @@
 import React, { useState, useEffect } from "react";
 import { ref, onValue, push, update, remove } from "firebase/database";
 import { database } from "../firebase";
-import { FaCog, FaUserCheck, FaSearch, FaSort } from "react-icons/fa";
+import {
+  FaCog,
+  FaUserCheck,
+  FaSearch,
+  FaSort,
+  FaArrowUp,
+} from "react-icons/fa";
 import DynamicModal from "./DynamicModal";
 
 const Spotter = () => {
@@ -14,6 +20,7 @@ const Spotter = () => {
   const [filter, setFilter] = useState("all");
   const [showDropdown, setShowDropdown] = useState(false);
   const [sortedAttendees, setSortedAttendees] = useState([]);
+  const [showScrollButton, setShowScrollButton] = useState(false);
 
   // Fetch attendees from Firebase
   useEffect(() => {
@@ -48,7 +55,7 @@ const Spotter = () => {
           database,
           `notifications/${latestNotificationKey}`
         );
-        notificationRef.remove();
+        remove(notificationRef);
       }
     });
   }, []);
@@ -115,6 +122,25 @@ const Spotter = () => {
       // Move present attendees (status: true) to the bottom
       return a.status === b.status ? 0 : a.status ? 1 : -1;
     });
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleScroll = () => {
+    if (window.scrollY > window.innerHeight / 2) {
+      setShowScrollButton(true);
+    } else {
+      setShowScrollButton(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
     <div className="mx-auto lg:p-4 md:p-0">
@@ -281,7 +307,7 @@ const Spotter = () => {
                   </span>
                   <hr className="flex-grow border-gray-300" />
                 </div>
-                {sortedAttendees.map((attendee) => (
+                {filteredAttendees.map((attendee) => (
                   <div
                     key={attendee.id}
                     className="bg-white border border-gray-300 shadow-md rounded-lg p-4 mb-4"
@@ -306,6 +332,7 @@ const Spotter = () => {
                         <span className="mx-2 text-gray-500 text-xs">
                           Actions
                         </span>
+                        <div className="flex-grow border-t border-gray-300"></div>
                       </div>
 
                       <button
@@ -342,6 +369,17 @@ const Spotter = () => {
           />
         )}
       </div>
+
+      {/* Scroll to Top Button */}
+      {showScrollButton && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-1 right-1 bg-black bg-opacity-50 text-white p-3 rounded-full flex flex-col items-center"
+        >
+          <FaArrowUp className="mb-[5px]" />
+          <span className="text-xs">Scroll Up</span>
+        </button>
+      )}
     </div>
   );
 };
